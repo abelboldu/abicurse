@@ -1,0 +1,4 @@
+deps:
+
+python-urwid
+python-lxml
