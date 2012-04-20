@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+# /usr/bin/env python
 
 """
 Author: Rebecca Breu
@@ -113,7 +113,7 @@ def menubar():
     """
 
     menu_text = [('menuh', " P"), ('menu', "rogram   "),
-                 ('menuh', "F"), ('menu', "oo   "),
+                 ('menuh', "A"), ('menu', "dmin   "),
                  ('menuh', "B"), ('menu', "ar   ")]
 
     return urwid.AttrWrap(urwid.Text(menu_text), 'menu')
@@ -127,6 +127,17 @@ def statusbar():
     
     status_text = "Statusbar -- Press Alt + <key> for menu entries"
     return urwid.AttrWrap(urwid.Text(status_text), 'menu')
+
+
+######################################################################
+
+def test_main_view():
+    """
+    Testing in main part of screen
+    """
+    text = "Foo shit 2012"
+
+    return urwid.AttrWrap(urwid.Filler(urwid.Text(text)), 'bg')
 
 
 ######################################################################
@@ -289,12 +300,12 @@ def program_menu(ui, dim, display):
 
 
 ######################################################################
-def foo_menu(ui, dim, display):
+def admin_menu(ui, dim, display):
     """
-    Program menu
+    Admin resources menu
     """
     
-    foo_menu = Menu(["Blah", "Foo", "Stuff"],
+    admin_menu = Menu(["Allocation Rules", "Datacenter", "Enterprise","Roles"],
                     ('menu', 'menuf'), (10, 1), display)
 
     keys = True
@@ -302,7 +313,7 @@ def foo_menu(ui, dim, display):
     #Event loop:
     while True:
         if keys:
-            ui.draw_screen(dim, foo_menu.render(dim, True))
+            ui.draw_screen(dim, admin_menu.render(dim, True))
             
         keys = ui.get_input()
 
@@ -313,17 +324,22 @@ def foo_menu(ui, dim, display):
 
         for k in keys:
             #Send key to underlying widget:
-            foo_menu.keypress(dim, k)
+            admin_menu.keypress(dim, k)
 
-        if foo_menu.selected == "Blah":
+        if admin_menu.selected == "Allocation Rules":
+            #Do something
+            test_main_view()
+            #return
+
+        if admin_menu.selected == "Datacenter":
             #Do something
             return
 
-        if foo_menu.selected == "Foo":
+        if admin_menu.selected == "Enterprise":
             #Do something
             return
 
-        if foo_menu.selected == "Stuff":
+        if admin_menu.selected == "Roles":
             #Do something
             return
 
@@ -402,9 +418,9 @@ def run():
             #Show program menu:
             program_menu(ui, dim, display)
 
-        if "meta F" in keys or "meta f" in keys:
-            #Show foo menu:
-            foo_menu(ui, dim, display)
+        if "meta A" in keys or "meta a" in keys:
+            #Show admin menu:
+            admin_menu(ui, dim, display)
 
         if "meta B" in keys or "meta b" in keys:
             #Show bar menu:
@@ -417,12 +433,20 @@ def run():
 
 #init screen:
 ui = urwid.curses_display.Screen()
+
 ui.register_palette(
-    [('menu', 'black', 'dark cyan', 'standout'),
-     ('menuh', 'yellow', 'dark cyan', ('standout', 'bold')),
-     ('menuf', 'black', 'light gray'),
-     ('bg', 'light gray', 'dark blue'),
+    [('menu', 'light gray', 'dark red', 'standout'),
+     ('menuh', 'yellow', 'dark red', ('standout', 'bold')),
+     ('menuf', 'yellow', 'dark red'),
+     ('bg', 'light gray', 'black'),
      ('bgf', 'black', 'light gray', 'standout')])
+
+# ui.register_palette(
+#    [('menu', 'black', 'dark cyan', 'standout'),
+#     ('menuh', 'yellow', 'dark cyan', ('standout', 'bold')),
+#     ('menuf', 'black', 'light gray'),
+#     ('bg', 'light gray', 'dark blue'),
+#     ('bgf', 'black', 'light gray', 'standout')])
 
 #start main part:
 ui.run_wrapper(run)
